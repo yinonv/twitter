@@ -1,0 +1,58 @@
+.inputBox-container{
+    width: 600px;
+    height: 61px;
+    border: 2px solid #CCCCCC;
+    box-sizing: border-box;
+    border-radius: 6px;
+    position: relative;
+}
+.save-button{
+    margin-top: 10px;
+    font-size: 16px;
+    color: white;
+    background-color: #007BFF;
+    border-radius: 4px;
+    font-family: Roboto;
+    width: 68px;
+    height: 34px;
+    margin-right: 8px;
+}
+.user-text-box{
+    position: absolute;
+    left: 16px;
+    top: 20px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    resize: none;
+    background: transparent;
+    color: #CCCCCC;
+    width: 564px;
+    height: 21px;
+    border: none;
+    font-family: Roboto;
+    outline: none;
+}
+.text-box::placeholder{
+    color: #CCCCCC;
+}
+.user-input-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.button-container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 12px;
+}
+.user-title{
+    display: flex;
+    justify-content: flex-start;
+    color: white;
+    width: 100%;
+    font-size: 18px;
+}

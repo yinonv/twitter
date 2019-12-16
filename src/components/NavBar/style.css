@@ -1,0 +1,23 @@
+.header{
+    height: 58px;
+    position: fixed;
+    background: #343A40;
+    border-radius: 6px;
+    left: 182px;
+    right: 182px;
+  }
+  .menu-link{
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 40px;
+  }
+  .menu-link:hover{
+    color: white;
+  }
+  .menu-container{
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+ 
+ 
