@@ -18,6 +18,9 @@
     border-radius: 4px;
     font-family: Roboto;
 }
+.tweet-button:disabled{
+    opacity: 0.5;
+}
 .text-box{
     position: absolute;
     left: 16px;
@@ -37,4 +40,21 @@
 }
 .text-box::placeholder{
     color: #CCCCCC;
+}
+.error {
+    background: #F8D7DA;
+    border: 1px solid #F5C6CB;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 338px;
+    height: 29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 16px;
+    bottom: 23px;
+}
+.error-text {
+    color: #721C24;
 }
