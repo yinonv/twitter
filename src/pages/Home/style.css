@@ -6,3 +6,8 @@
     margin-top: 58px;
     background: #15202B;
   }
+  .loader{
+    margin-top: 50px;
+    height: 100px;
+    width: 100px;
+  }

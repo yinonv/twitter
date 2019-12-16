@@ -34,6 +34,7 @@ class TweetBox extends React.Component {
                 <button className="tweet-button" onClick={() => {
                     handleTweet(inputValue);
                     document.querySelector('textarea').value = '';
+                    this.setState({inputValue: ''})
                 }}>Tweet</button>
             </div>
         )
