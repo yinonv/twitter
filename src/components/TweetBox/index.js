@@ -22,19 +22,19 @@ class TweetBox extends React.Component {
         this.setState({ inputValue: tweet, error: false });
     }
     render() {
-        const { inputValue } = this.state;
+        const { inputValue, error } = this.state;
         const { handleTweet } = this.props;
         return (
             <div className="tweetBox-container">
                 <textarea onChange={(e) => this.handlInput(e)} className="text-box" placeholder="What you have in mind..."></textarea>
-                {this.state.error &&
+                {error &&
                     <div className="error">
                         <p className="error-text">The tweet can't contain more then 140 chars.</p>
                     </div>}
                 <button className="tweet-button" onClick={() => {
                     handleTweet(inputValue);
                     document.querySelector('textarea').value = '';
-                    this.setState({inputValue: ''})
+                    this.setState({ inputValue: '' })
                 }}>Tweet</button>
             </div>
         )
