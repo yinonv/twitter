@@ -46,7 +46,7 @@ class Home extends React.Component {
             console.log(e);
         }
     }
-    handleTweet(msg) {
+    async handleTweet(msg) {
         if (msg == '') {
             return;
         }
@@ -71,7 +71,7 @@ class Home extends React.Component {
         }
         newArray.sort((a, b) => new Date(b.date) - new Date(a.date));
         this.setState({ tweet: msg, tweetsArray: newArray, noUser: false })
-        this.createNewTweet(newTweet);
+        await this.createNewTweet(newTweet);
     }
     render() {
         const { tweetsArray, loading, noUser } = this.state;
