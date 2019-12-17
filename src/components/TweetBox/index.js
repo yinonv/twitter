@@ -1,12 +1,13 @@
 import React from 'react';
 import './style.css'
+import MyAppContext from '../../context'
 
 class TweetBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             inputValue: '',
-            error: false,
+            error: false
         }
     }
     handlInput(e) {
@@ -42,3 +43,4 @@ class TweetBox extends React.Component {
 }
 
 export default TweetBox;
+

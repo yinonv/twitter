@@ -12,26 +12,39 @@ class Home extends React.Component {
             tweet: '',
             tweetsArray: null,
             loading: false,
-            noUser: false,
+            noUser: false
         }
         this.messages = null;
+        this.interval = null;
     }
     componentDidMount() {
-        this.setState({ loading: true })
-        this.getTweets();
+        this.setState({ loading: true });
         document.getElementsByClassName('menu-link')[1].classList.remove('selected');
         document.getElementsByClassName('menu-link')[0].classList.add('selected');
         const username = JSON.parse(localStorage.getItem("username"));
         if (username == null) {
             this.setState({ noUser: true });
         }
+        this.getTweets();
+        this.interval = setInterval(this.getTweets.bind(this), 5000)
+    }
+    componentWillUnmount() {
+        this.interval = null;
     }
     async createNewTweet(obj) {
-        const response = await createPost(obj);
+        try {
+            const response = await createPost(obj);
+        } catch (e) {
+            console.log(e);
+        }
     }
     async getTweets() {
-        const response = await getPosts();
-        this.setState({ tweetsArray: response.data.tweets, loading: false })
+        try {
+            const response = await getPosts();
+            this.setState({ tweetsArray: response.data.tweets, loading: false })
+        } catch (e) {
+            console.log(e);
+        }
     }
     handleTweet(msg) {
         if (msg == '') {
@@ -71,7 +84,6 @@ class Home extends React.Component {
             </div>
         )
     }
-
 }
 
 export default Home;

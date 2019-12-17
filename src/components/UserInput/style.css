@@ -1,5 +1,5 @@
 .inputBox-container{
-    width: 600px;
+    width: calc(100vw/2);
     height: 61px;
     border: 2px solid #CCCCCC;
     box-sizing: border-box;
@@ -28,7 +28,7 @@
     resize: none;
     background: transparent;
     color: #CCCCCC;
-    width: 564px;
+    width: calc(100vw/2.2);
     height: 21px;
     border: none;
     font-family: Roboto;
@@ -56,3 +56,8 @@
     width: 100%;
     font-size: 18px;
 }
+@media screen and (max-width: 750px){
+    .inputBox-container{
+        width: calc(100vw*0.9);
+    }
+  }
