@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.css';
-import UserInput from '../../components/UserInput'
+import UserInput from '../../components/UserInput';
 
 
 class Profile extends React.Component {

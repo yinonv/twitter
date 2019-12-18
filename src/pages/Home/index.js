@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import TweetBox from '../../components/TweetBox';
 import Message from '../../components/Message'
-import { createPost, getPosts } from '../../lib/api'
+import { createPost, getPosts, collection, db } from '../../lib/api';
 
 
 class Home extends React.Component {
@@ -24,10 +24,16 @@ class Home extends React.Component {
             this.setState({ noUser: true });
         }
         this.getTweets();
-        this.interval = setInterval(this.getTweets.bind(this), 5000)
+        this.interval = setInterval(this.getTweets.bind(this), 15000)
     }
     componentWillUnmount() {
         this.interval = null;
+    }
+    async getTweets() {
+        let tweets = await collection.get();
+        let arr = [];
+        tweets.forEach(doc => arr.push(doc.data().tweet));
+        this.setState({ tweetsArray: arr, loading: false })
     }
     async createNewTweet(obj) {
         try {
@@ -36,14 +42,14 @@ class Home extends React.Component {
             console.log(e);
         }
     }
-    async getTweets() {
-        try {
-            const response = await getPosts();
-            this.setState({ tweetsArray: response.data.tweets, loading: false })
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    // async getTweets() {
+    //     try {
+    //         const response = await getPosts();
+    //         this.setState({ tweetsArray: response.data.tweets, loading: false })
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
     async handleTweet(msg) {
         if (msg == '') {
             return;
