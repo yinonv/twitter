@@ -71,3 +71,13 @@
         width: calc(100vw*0.9);
     }
   }
+@media screen and (max-width: 500px){
+    .saved{
+        left: 15px;
+        font-size: 15px;
+    }
+    .save-button{
+        margin-right: 0;
+    }
+}
+

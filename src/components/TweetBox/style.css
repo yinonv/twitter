@@ -65,11 +65,40 @@
 .error-text {
     color: #721C24;
 }
+@media screen and (max-width: 1000px){
+    .error{
+        width: calc(100vw/3);
+        height: 40px;
+        bottom: 15px;
+    }
+    .tweet-button{
+        bottom: 15px;
+    }
+  }
 @media screen and (max-width: 700px){
     .tweetBox-container{
         width: calc(100vw*0.9);
     }
     .text-box{
-        width: calc(100vw*0.85);
+        width: calc(100vw*0.8);
+    }
+    .error{
+        width: calc(100vw/2);
+    }
+    .error-text{
+        word-wrap: break-word;
+    }
+  }
+  @media screen and (max-width: 400px){
+    .error-text{
+        font-size: 15px;
+    }
+    .text-box{
+        top: 5px;
+    }
+  }
+  @media screen and (max-width: 310px){
+    .error-text{
+        font-size: 14px;
     }
   }
