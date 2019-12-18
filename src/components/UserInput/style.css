@@ -16,6 +16,11 @@
     width: 68px;
     height: 34px;
     margin-right: 8px;
+    border: none;
+}
+.save-button:active{
+    transform: scale(.96);
+    opacity: 0.9;
 }
 .user-text-box{
     position: absolute;
@@ -55,6 +60,11 @@
     color: white;
     width: 100%;
     font-size: 18px;
+}
+.saved{
+    color: white;
+    position: absolute;
+    top: 310px;
 }
 @media screen and (max-width: 750px){
     .inputBox-container{

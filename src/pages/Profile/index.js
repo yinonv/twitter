@@ -9,10 +9,6 @@ class Profile extends React.Component {
         this.state = {
         }
     }
-    componentDidMount() {
-        document.getElementsByClassName('menu-link')[0].classList.remove('selected');
-        document.getElementsByClassName('menu-link')[1].classList.add('selected');
-    }
     render() {
         return (
             <div className="profile-body-container">

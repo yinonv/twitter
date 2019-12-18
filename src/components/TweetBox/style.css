@@ -19,6 +19,11 @@
     background-color: #007BFF;
     border-radius: 4px;
     font-family: Roboto;
+    border: none;
+    width: 65px;
+}
+.tweet-button:active{
+    transform: scale(.96);
 }
 .tweet-button:disabled{
     opacity: 0.5;

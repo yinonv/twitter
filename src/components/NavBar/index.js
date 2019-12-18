@@ -1,13 +1,13 @@
 import React from 'react';
 import './style.css'
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function NavBar() {
     return (
         <header className="header">
             <div className="menu-container">
-                <Link to="/home" className="menu-link">Home</Link>
-                <Link to="/profile" className="menu-link">Profile</Link>
+                <NavLink exact to="/" className="menu-link" activeClassName='selected'>Home</NavLink>
+                <NavLink exact to="/profile" className="menu-link" activeClassName='selected'>Profile</NavLink>
             </div>
         </header>
     )

@@ -19,8 +19,6 @@ class Home extends React.Component {
     }
     componentDidMount() {
         this.setState({ loading: true });
-        document.getElementsByClassName('menu-link')[1].classList.remove('selected');
-        document.getElementsByClassName('menu-link')[0].classList.add('selected');
         const username = JSON.parse(localStorage.getItem("username"));
         if (username == null) {
             this.setState({ noUser: true });
@@ -56,7 +54,6 @@ class Home extends React.Component {
             return;
         }
         const { tweetsArray } = this.state;
-        const { user } = this.props;
         const date = new Date;
         const newTweet = {
             userName: username,
