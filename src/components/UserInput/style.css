@@ -73,7 +73,7 @@
   }
 @media screen and (max-width: 500px){
     .saved{
-        left: 15px;
+        left: 25px;
         font-size: 15px;
     }
     .save-button{
