@@ -1,4 +1,6 @@
-import axios from 'axios';
+//import axios from 'axios';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+
 const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
@@ -13,18 +15,20 @@ var firebaseConfig = {
     messagingSenderId: "652813629953",
     appId: "1:652813629953:web:5bab2a403364f4a7a5de00",
     measurementId: "G-Y7SMJ673WP"
-  };
+};
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
 const db = firebase.firestore();
-const collection = db.collection('twitter')
-export {collection , db};
+const messages = db.collection('messages');
+const users = db.collection('users');
+export { messages, users, storage };
 
 export function createPost(tweet) {
     //return axios.post(`https://itc-bootcamp-19-dot-charcha-dev.appspot.com/tweet`, { tweet });
-    collection.add({tweet});
+    messages.add(tweet);
 }
 export function getPosts() {
     //return axios.get(`https://itc-bootcamp-19-dot-charcha-dev.appspot.com/tweet`);
-    collection.get();
+    messages.get();
 }

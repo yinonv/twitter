@@ -1,9 +1,11 @@
 body{
     font-family: Roboto;
+    background: #15202B;
 }
 .container{
     height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     background: #15202B;
 }

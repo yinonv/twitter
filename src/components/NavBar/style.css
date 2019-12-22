@@ -10,7 +10,8 @@
   .menu-link{
     text-decoration: none;
     color: rgba(255, 255, 255, 0.5);
-    margin-left: 40px;
+    margin-left: 30px;
+    margin-right: 15px;
   }
   .menu-link:hover{
     color: white;
@@ -19,10 +20,36 @@
     display: flex;
     align-items: center;
     height: 100%;
+    justify-content: space-between;
   }
   .selected{
     color: white;
   }
+  .logout-button{
+    height: 35px;
+    font-size: 16px;
+    line-height: 19px;
+    color: white;
+    background-color: rgb(175, 10, 10);
+    border-radius: 4px;
+    font-family: Roboto;
+    border: none;
+    width: 85px;
+    margin-right: 15px;
+}
+.logout-button:active{
+    transform: scale(.96);
+}
+.user-image{
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.user-container{
+  display: flex;
+  align-items: center;
+}
   @media screen and (max-width: 775px){
     .header{
       left: 50px;

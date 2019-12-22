@@ -2,8 +2,9 @@ import React from 'react';
 import './style.css';
 import TweetBox from '../../components/TweetBox';
 import Message from '../../components/Message'
-import { createPost, getPosts, collection, db } from '../../lib/api';
-
+import { createPost, getPosts, messages } from '../../lib/api';
+import firebase from 'firebase'
+import InfiniteLoader from 'react-infinite-loader'
 
 class Home extends React.Component {
     constructor(props) {
@@ -11,54 +12,31 @@ class Home extends React.Component {
         this.state = {
             tweet: '',
             tweetsArray: null,
-            loading: false,
-            noUser: false
+            noUser: false,
+            moreMessages: true
         }
         this.messages = null;
-        this.interval = null;
+        this.tweetCounter = 10;
+        this.prev = 10;
     }
     componentDidMount() {
-        this.setState({ loading: true });
-        const username = JSON.parse(localStorage.getItem("username"));
-        if (username == null) {
-            this.setState({ noUser: true });
-        }
-        this.getTweets();
-        this.interval = setInterval(this.getTweets.bind(this), 15000)
+        this.liveTweets();
     }
-    componentWillUnmount() {
-        this.interval = null;
+    liveTweets() {
+        messages.orderBy('date', 'desc').limit(this.tweetCounter).onSnapshot(tweets => {
+            let arr = [];
+            tweets.forEach(doc => {
+                arr.push(doc.data())
+            });
+            this.tweetCounter += 10;
+            this.setState({ tweetsArray: arr, loading: false })
+        });
     }
-    async getTweets() {
-        let tweets = await collection.get();
-        let arr = [];
-        tweets.forEach(doc => arr.push(doc.data().tweet));
-        this.setState({ tweetsArray: arr, loading: false })
-    }
-    async createNewTweet(obj) {
-        try {
-            const response = await createPost(obj);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    // async getTweets() {
-    //     try {
-    //         const response = await getPosts();
-    //         this.setState({ tweetsArray: response.data.tweets, loading: false })
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
     async handleTweet(msg) {
         if (msg == '') {
             return;
         }
-        const username = JSON.parse(localStorage.getItem("username"));
-        if (username == null) {
-            this.setState({ noUser: true });
-            return;
-        }
+        const username = firebase.auth().currentUser.displayName;
         const { tweetsArray } = this.state;
         const date = new Date;
         const newTweet = {
@@ -74,16 +52,30 @@ class Home extends React.Component {
         }
         newArray.sort((a, b) => new Date(b.date) - new Date(a.date));
         this.setState({ tweet: msg, tweetsArray: newArray, noUser: false })
-        await this.createNewTweet(newTweet);
+        createPost(newTweet);
+    }
+    async getMoreTweets() {
+        let tweets = await messages.orderBy('date', 'desc').limit(this.tweetCounter).get()
+        let arr = [];
+        tweets.forEach(doc => arr.push(doc.data()));
+        this.prev = arr.length - this.state.tweetsArray.length;
+        if(this.prev <  10){
+            this.tweetCounter += this.prev;
+            this.setState({ tweetsArray: arr, loading: false , moreMessages: false})
+            return;
+        }
+        this.tweetCounter += 10;
+        this.setState({ tweetsArray: arr, loading: false })
     }
     render() {
-        const { tweetsArray, loading, noUser } = this.state;
+        const { tweetsArray, moreMessages, noUser } = this.state;
         return (
             <div className="home-body-container">
                 {noUser && <h1 className="user-error-title">Set username in profile</h1>}
                 {!noUser && <TweetBox handleTweet={(tweet) => this.handleTweet(tweet)} />}
-                {loading && <img src="./loader.gif" className="loader"></img>}
-                {tweetsArray != null && tweetsArray.map((tweet, i) => <Message key={i} user={tweet.userName} msg={tweet.content} time={tweet.date} />)}
+                {tweetsArray != null && tweetsArray.map((tweet) => <Message key={tweet.id} user={tweet.userName} msg={tweet.content} time={tweet.date} />)}
+                {moreMessages && <InfiniteLoader onVisited={() => this.getMoreTweets()} />}
+                {!moreMessages && <div><h3 className="no-messages">No more messages!</h3></div>}
             </div>
         )
     }
