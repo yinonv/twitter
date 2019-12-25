@@ -12,26 +12,23 @@ class Home extends React.Component {
         this.state = {
             tweetsArray: null,
             moreMessages: true,
-            loading: false
         }
-        this.prev = '';
         this.messages = null;
-        this.tweetCounter = 10;
     }
     componentDidMount() {
         this.liveTweets();
     }
-    async liveTweets() {
-        messages.orderBy('fullDate', 'desc').limit(this.tweetCounter).onSnapshot(tweets => {
+    liveTweets() {
+        messages.orderBy('fullDate', 'desc').limit(10).onSnapshot(tweets => {
             let arr = [];
             tweets.forEach(doc => {
-                arr.push(doc.data())
+                arr.push({ id: doc.id, tweet: doc.data() })
             });
-            this.tweetCounter += 10;
-            if (arr.length < 10) {
-                this.setState({ moreMessages: false })
+            if (arr.length < 9) {
+                this.setState({ tweetsArray: arr, moreMessages: false });
+            } else {
+                this.setState({ tweetsArray: arr });
             }
-            this.setState({ tweetsArray: arr, loading: false });
         });
     }
     getDate(date) {
@@ -55,7 +52,6 @@ class Home extends React.Component {
         if (msg == '') {
             return;
         }
-        this.setState({ tweetsArray: null, loading: true });
         const uid = firebase.auth().currentUser.uid;
         const fullDate = new Date;
         const shortDate = this.getDate(fullDate);
@@ -67,30 +63,40 @@ class Home extends React.Component {
         }
         createPost(newTweet);
     }
-    async getMoreTweets() {
-        let tweets = await messages.orderBy('fullDate', 'desc').limit(this.tweetCounter).get()
-        let arr = [];
-        tweets.forEach(doc => arr.push(doc.data()));
-        this.prev = arr.length - this.state.tweetsArray.length;
-        if (this.prev < 10) {
-            this.tweetCounter += this.prev;
-            this.setState({ tweetsArray: arr, moreMessages: false })
-            return;
+    async showMoreDocuments() {
+        const { tweetsArray } = this.state;
+        const first = messages
+            .orderBy("fullDate", "desc")
+            .limit(tweetsArray.length);
+        const documentSnapshots = await first.get()
+        const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+        const next = messages
+            .orderBy("fullDate", "desc")
+            .startAfter(lastVisible)
+            .limit(10);
+        const nextDocumentsSnapshot = await next.get();
+        if (nextDocumentsSnapshot.docs.length < 10) {
+            this.setState({ moreMessages: false })
         }
-        this.tweetCounter += 10;
-        this.setState({ tweetsArray: arr })
+        let arr = [];
+        nextDocumentsSnapshot.docs.forEach(doc => arr.push({ id: doc.id, tweet: doc.data() }));
+        this.setState({ tweetsArray: [...tweetsArray, ...arr] })
+    }
+    async deleteCallback(docId) {
+        console.log(docId);
+        await messages.doc(docId).delete();
     }
     render() {
-        const { tweetsArray, moreMessages, loading } = this.state;
+        const { tweetsArray, moreMessages } = this.state;
         return (
             <div className="home-body-container">
-                <TweetBox loading={loading} handleTweet={(tweet) => this.handleTweet(tweet)} />
+                <TweetBox handleTweet={(tweet) => this.handleTweet(tweet)} />
                 {tweetsArray != null &&
-                    tweetsArray.map(tweet =>
-                        <Message key={tweet.id} uid={tweet.uid}
-                            msg={tweet.content} date={tweet.shortDate.date} time={tweet.shortDate.time} />
+                    tweetsArray.map(doc =>
+                        <Message key={doc.id} uid={doc.tweet.uid} deleteCallback={() => this.deleteCallback(doc.id)}
+                            msg={doc.tweet.content} date={doc.tweet.shortDate.date} time={doc.tweet.shortDate.time} />
                     )}
-                {moreMessages && <InfiniteLoader onVisited={() => this.getMoreTweets()} />}
+                {moreMessages && <InfiniteLoader onVisited={() => this.showMoreDocuments()} />}
             </div>
         )
     }

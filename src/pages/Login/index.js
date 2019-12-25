@@ -98,6 +98,11 @@ class Login extends React.Component {
                     this.setState({ wrongInput: true });
                     break;
                 }
+                case "The email address is badly formatted.": {
+                    this.errorMessage = "Please enter a valid email.";
+                    this.setState({ wrongInput: true });
+                    break;
+                }
             }
         }
         this.defaultImage = true;

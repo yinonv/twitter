@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css'
 import { usersRef } from '../../lib/api'
+import firebase from 'firebase'
 
 class Message extends React.Component {
     constructor(props) {
@@ -21,8 +22,9 @@ class Message extends React.Component {
         this.setState({ username: data.userName, img: data.img, loaded: true })
     }
     render() {
-        const { msg, time, date } = this.props;
+        const { msg, time, date, uid, deleteCallback} = this.props;
         const { username, img, loaded } = this.state;
+        const currentUser = firebase.auth().currentUser.uid;
         if (!loaded) {
             return <div></div>
         }
@@ -33,9 +35,15 @@ class Message extends React.Component {
                         <img src={img} className="img"></img>
                         <p>{username}</p>
                     </div>
-                    <div className="date-time-container">
-                        <div className="time-date">{date}</div>
-                        <div className="time-date">{time}</div>
+                    <div className="right-side-container">
+                        <div className="date-time-container">
+                            <div className="time-date">{date}</div>
+                            <div className="time-date">{time}</div>
+                        </div>
+                        <div>
+                            {currentUser == uid && <button className="delete-button"
+                                onClick={deleteCallback}>delete</button>}
+                        </div>
                     </div>
                 </div>
                 <div className="message-content">
