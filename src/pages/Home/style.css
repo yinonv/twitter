@@ -17,3 +17,7 @@
   .no-messages{
     color: white;
   }
+  .tweet-loader{
+    height: 350px;
+    width: 500px;
+  }

@@ -12,6 +12,7 @@ class Home extends React.Component {
         this.state = {
             tweetsArray: null,
             moreMessages: true,
+            loading: false
         }
         this.prev = '';
         this.messages = null;
@@ -30,8 +31,7 @@ class Home extends React.Component {
             if (arr.length < 10) {
                 this.setState({ moreMessages: false })
             }
-            this.setState({ tweetsArray: null });
-            this.setState({ tweetsArray: arr });
+            this.setState({ tweetsArray: arr, loading: false });
         });
     }
     getDate(date) {
@@ -55,6 +55,7 @@ class Home extends React.Component {
         if (msg == '') {
             return;
         }
+        this.setState({ tweetsArray: null, loading: true });
         const uid = firebase.auth().currentUser.uid;
         const fullDate = new Date;
         const shortDate = this.getDate(fullDate);
@@ -80,17 +81,16 @@ class Home extends React.Component {
         this.setState({ tweetsArray: arr })
     }
     render() {
-        const { tweetsArray, moreMessages } = this.state;
+        const { tweetsArray, moreMessages, loading } = this.state;
         return (
             <div className="home-body-container">
-                <TweetBox handleTweet={(tweet) => this.handleTweet(tweet)} />
+                <TweetBox loading={loading} handleTweet={(tweet) => this.handleTweet(tweet)} />
                 {tweetsArray != null &&
                     tweetsArray.map(tweet =>
                         <Message key={tweet.id} uid={tweet.uid}
                             msg={tweet.content} date={tweet.shortDate.date} time={tweet.shortDate.time} />
                     )}
                 {moreMessages && <InfiniteLoader onVisited={() => this.getMoreTweets()} />}
-                {!moreMessages && <div><h3 className="no-messages">No more messages!</h3></div>}
             </div>
         )
     }

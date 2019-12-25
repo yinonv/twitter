@@ -8,7 +8,6 @@ class TweetBox extends React.Component {
         this.state = {
             inputValue: '',
             error: false,
-            loading: false
         }
         this.textArea = React.createRef();
     }
@@ -24,13 +23,13 @@ class TweetBox extends React.Component {
     async handleButtonClick(e) {
         const { inputValue, error } = this.state;
         const { handleTweet, update } = this.props;
-        this.setState({ loading: true})
         this.textArea.current.value = '';
-        await handleTweet(inputValue);
-        this.setState({ inputValue: '', loading: false})
+        const success = await handleTweet(inputValue);
+        this.setState({ inputValue: '' })
     }
     render() {
-        const { error, loading } = this.state;
+        const { error } = this.state;
+        const { loading } = this.props;
         return (
             <div className="tweetBox-container">
                 <textarea ref={this.textArea} onChange={(e) => this.handlInput(e)} className="text-box" placeholder="What you have in mind..."></textarea>
