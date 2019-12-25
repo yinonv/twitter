@@ -50,7 +50,7 @@
 .button-container{
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     width: 100%;
     margin-top: 12px;
 }
@@ -63,8 +63,6 @@
 }
 .saved{
     color: white;
-    position: absolute;
-    top: 310px;
 }
 @media screen and (max-width: 750px){
     .inputBox-container{
@@ -73,7 +71,6 @@
   }
 @media screen and (max-width: 500px){
     .saved{
-        left: 25px;
         font-size: 15px;
     }
     .save-button{

@@ -1,5 +1,7 @@
 import React from 'react';
 import './style.css'
+import firebase from 'firebase'
+import { usersRef } from '../../lib/api';
 
 class UserInput extends React.Component {
     constructor(props) {
@@ -9,39 +11,49 @@ class UserInput extends React.Component {
             saved: false,
             savedName: false
         }
-        this.savedName = null;
+        this.message = '';
     }
     componentDidMount() {
-        this.savedName = JSON.parse(localStorage.getItem("username"));
-        if (this.savedName == null) {
-            this.setState({ saved: false, savedName: false });
-            return;
-        }
-        this.setState({ saved: false, savedName: true });
+        this.setState({ saved: false });
+        this.getName()
     }
-    handleUser() {
+    async getName() {
+        const data = await this.getDoc();
+        this.setState({ savedName: data.userName, saved: true })
+    }
+    async getDoc() {
+        const uid = firebase.auth().currentUser.uid;
+        const doc = await usersRef.doc(uid).get();
+        return doc.data();
+    }
+    async handleUser() {
         const { name } = this.state;
         if (name == null) {
             return;
         }
-        localStorage.setItem("username", JSON.stringify(name));
-        this.savedName = name;
-        this.setState({ saved: true });
+        const uid = firebase.auth().currentUser.uid;
+        const data = await this.getDoc();
+        usersRef.doc(uid).set({
+            userName: name,
+            img: data.img,
+        })
+        this.message = "Your profile has been saved."
+        this.setState({ saved: true, savedName: name });
     }
     render() {
-        const { saved , savedName} = this.state;
+        const { saved, savedName } = this.state;
         return (
             <div className="user-input-container">
                 <div className="user-title">
-                    <p>User Name {savedName && `: ${this.savedName}`}</p>
+                    <p>User Name {saved && `: ${savedName}`}</p>
                 </div>
                 <div className="inputBox-container">
                     <textarea onChange={(e) => this.setState({ name: e.target.value })} className="user-text-box" placeholder="Enter Name"></textarea>
                 </div>
                 <div className="button-container">
+                    <p className="saved">{this.message}</p>
                     <button className="save-button" onClick={() => this.handleUser()}>Save</button>
                 </div>
-                {saved && <p className="saved">Your profile has been saved</p>}
             </div>
         )
     }

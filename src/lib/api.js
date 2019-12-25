@@ -1,5 +1,3 @@
-//import axios from 'axios';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 const firebase = require("firebase");
 // Required for side-effects
@@ -18,17 +16,14 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const storage = firebase.storage();
 const db = firebase.firestore();
 const messages = db.collection('messages');
-const users = db.collection('users');
-export { messages, users, storage };
+const usersRef = db.collection('users');
+export { messages , usersRef};
 
 export function createPost(tweet) {
-    //return axios.post(`https://itc-bootcamp-19-dot-charcha-dev.appspot.com/tweet`, { tweet });
     messages.add(tweet);
 }
 export function getPosts() {
-    //return axios.get(`https://itc-bootcamp-19-dot-charcha-dev.appspot.com/tweet`);
     messages.get();
 }

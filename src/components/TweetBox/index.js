@@ -10,6 +10,7 @@ class TweetBox extends React.Component {
             error: false,
             loading: false
         }
+        this.textArea = React.createRef();
     }
     handlInput(e) {
         const text = e.target;
@@ -22,17 +23,17 @@ class TweetBox extends React.Component {
     }
     async handleButtonClick(e) {
         const { inputValue, error } = this.state;
-        const { handleTweet } = this.props;
+        const { handleTweet, update } = this.props;
         this.setState({ loading: true})
+        this.textArea.current.value = '';
         await handleTweet(inputValue);
-        document.querySelector('textarea').value = '';
         this.setState({ inputValue: '', loading: false})
     }
     render() {
         const { error, loading } = this.state;
         return (
             <div className="tweetBox-container">
-                <textarea onChange={(e) => this.handlInput(e)} className="text-box" placeholder="What you have in mind..."></textarea>
+                <textarea ref={this.textArea} onChange={(e) => this.handlInput(e)} className="text-box" placeholder="What you have in mind..."></textarea>
                 {error &&
                     <div className="error">
                         <p className="error-text">The tweet can't contain more then 140 chars.</p>
