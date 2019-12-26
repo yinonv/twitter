@@ -83,8 +83,19 @@ class Home extends React.Component {
         this.setState({ tweetsArray: [...tweetsArray, ...arr] })
     }
     async deleteCallback(docId) {
-        console.log(docId);
+        const { tweetsArray } = this.state;
+        let arr = [];
+        console.log(tweetsArray)
         await messages.doc(docId).delete();
+        if (tweetsArray.length < 10) {
+            return;
+        }
+        tweetsArray.forEach(doc => {
+            if (doc.id != docId) {
+                arr.push(doc);
+            }
+        });
+        this.setState({ tweetsArray: arr });
     }
     render() {
         const { tweetsArray, moreMessages } = this.state;

@@ -28,6 +28,22 @@
 .tweet-button:disabled{
     opacity: 0.5;
 }
+.attach {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+    z-index: -1;
+}
+.attach + label {
+    right: 94px;
+    bottom: 17px;
+    position: absolute;
+    cursor: pointer; 
+}
+.attach-pic{
+    transform: scale(.8)
+}
 .text-box{
     position: absolute;
     left: 16px;
@@ -73,6 +89,9 @@
     }
     .tweet-button{
         bottom: 15px;
+    }
+    .attach + label {
+        bottom: 9px;
     }
   }
 @media screen and (max-width: 700px){

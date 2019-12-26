@@ -37,6 +37,8 @@ class TweetBox extends React.Component {
                     <div className="error">
                         <p className="error-text">The tweet can't contain more then 140 chars.</p>
                     </div>}
+                <input type="file" className="attach" onChange={(e) => {return}} name="file" id="file" accept=".jpg, .png, .jpeg" />
+                <label for="file"><img src="./attach.png" className="attach-pic"></img></label>
                 <button className="tweet-button" disabled={error} onClick={(e) => this.handleButtonClick(e)}>Tweet</button>
             </div>
         )
