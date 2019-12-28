@@ -41,8 +41,8 @@ class Home extends React.Component {
             const { moreMessages } = this.state;
             const otherUserTweet = this.tweetFromDifferentUser(tweets);
             if (window.scrollY > 360 && otherUserTweet) {
-                this.props.newCount(1);
-                return;
+                const { newCount } = this.props;
+                newCount(1);
             }
             if (!moreMessages) {
                 this.getAllMessages();
@@ -127,8 +127,10 @@ class Home extends React.Component {
         debugger;
         const doc = await messages.doc(docId).get();
         const imageNum = doc.data().imageNum;
-        const storageRef = firebase.storage().ref(`/message_images/${imageNum}`);
-        await storageRef.delete();
+        if (imageNum != null) {
+            const storageRef = firebase.storage().ref(`/message_images/${imageNum}`);
+            await storageRef.delete();
+        }
         await messages.doc(docId).delete();
         if (tweetsArray.length < 10) {
             return;
