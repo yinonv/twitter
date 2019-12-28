@@ -38,7 +38,7 @@ class App extends React.Component {
     }
   }
   handleLogOut() {
-    this.setState({ isSignedIn: false });
+    this.setState({ isSignedIn: false, newMessageCounter: 0 });
   }
   async handleUpload(file) {
     this.setState({ img: './img_upload_loader.gif' });

@@ -19,7 +19,6 @@
     display: flex;
     align-items: center;
     color: white;
-    margin-top: 10px;
     margin-left: 20px;
     margin-right: 20px;
     word-wrap:break-word;
@@ -30,13 +29,14 @@
 }
 .message-text{
     word-wrap: break-word;
-    width: 50%;
+    word-break: break-all;
+    width: 40%;
 }
 .tweet-image{
     height: 100px;
     width: 100px;
-    margin-left: 15px;
     margin-bottom: 10px;
+    margin-left: 15px;
 }
 .img{
     height: 30px;
@@ -80,8 +80,11 @@
         width: calc(100vw*0.9);
     }
 }
-@media screen and (max-width: 500){
+@media screen and (max-width: 400px){
     .message-text{
-        width: 60%;
+        width: auto;
+    }
+    .message-content{
+        margin-top: 10px;
     }
 }

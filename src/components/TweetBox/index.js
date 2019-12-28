@@ -13,6 +13,7 @@ class TweetBox extends React.Component {
             uploading: false,
             showImage: false
         }
+        this.num = null;
         this.textArea = React.createRef();
     }
     async uploadImage(e) {
@@ -20,7 +21,8 @@ class TweetBox extends React.Component {
             return;
         }
         this.setState({ image: './img_upload_loader.gif', showImage: true, uploading: true });
-        const storageRef = firebase.storage().ref(`/message_images/${Math.random()}`);
+        this.num = Math.random();
+        const storageRef = firebase.storage().ref(`/message_images/${this.num}`);
         const file = e.target.files[0];
         const snapshot = await storageRef.put(file);
         const downloadURL = await snapshot.ref.getDownloadURL();
@@ -38,7 +40,7 @@ class TweetBox extends React.Component {
     async handleButtonClick() {
         const { inputValue, image } = this.state;
         const { handleTweet } = this.props;
-        await handleTweet(inputValue, image);
+        await handleTweet(inputValue, image, this.num);
         this.textArea.current.value = '';
         this.setState({ inputValue: '', showImage: false , image: null})
     }

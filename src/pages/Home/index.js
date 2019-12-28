@@ -15,29 +15,33 @@ class Home extends React.Component {
             newMessages: false,
         }
         this.messages = null;
+        this.unsubscribe = null;
     }
     componentDidMount() {
         this.liveTweets();
     }
+    componentWillUnmount() {
+        const { newCount } = this.props;
+        newCount(0);
+        this.unsubscribe();
+    }
     tweetFromDifferentUser(tweets) {
         const changes = tweets.docChanges();
         const currentUID = firebase.auth().currentUser.uid;
-        let newTweet = true;
-        changes.forEach(change => {
-            const uid = change.doc.data().uid;
-            if (change.type == "added" && uid == currentUID) {
-                newTweet = false;
-            }
-        })
-        return newTweet;
+        if (changes[0].type == "added" && changes[0].doc.data().uid != currentUID && changes[0].newIndex == 0) {
+            return true;
+        }
+        if (changes.length == 2 && changes[1].type == "added" && changes[1].doc.data().uid != currentUID && changes[1].newIndex == 0) {
+            return true;
+        }
+        return false;
     }
     liveTweets() {
-        messages.orderBy('fullDate', 'desc').limit(10).onSnapshot(tweets => {
+        this.unsubscribe = messages.orderBy('fullDate', 'desc').limit(10).onSnapshot(tweets => {
             const { moreMessages } = this.state;
             const otherUserTweet = this.tweetFromDifferentUser(tweets);
             if (window.scrollY > 360 && otherUserTweet) {
-                const { newCount } = this.props;
-                newCount(0.5);
+                this.props.newCount(1);
                 return;
             }
             if (!moreMessages) {
@@ -81,7 +85,7 @@ class Home extends React.Component {
             time: time
         }
     }
-    async handleTweet(msg, image) {
+    async handleTweet(msg, image, imageNum) {
         if (msg == '' && image == null) {
             return;
         }
@@ -93,6 +97,7 @@ class Home extends React.Component {
             shortDate: shortDate,
             fullDate: fullDate,
             image: image,
+            imageNum: imageNum,
             uid: uid
         }
         createPost(newTweet);
@@ -119,6 +124,11 @@ class Home extends React.Component {
     async deleteCallback(docId) {
         const { tweetsArray } = this.state;
         let arr = [];
+        debugger;
+        const doc = await messages.doc(docId).get();
+        const imageNum = doc.data().imageNum;
+        const storageRef = firebase.storage().ref(`/message_images/${imageNum}`);
+        await storageRef.delete();
         await messages.doc(docId).delete();
         if (tweetsArray.length < 10) {
             return;
@@ -143,7 +153,7 @@ class Home extends React.Component {
             <div className="home-body-container">
                 {newMessages && <button className="new-messages-button"
                     onClick={() => this.scrollUp()}>Check new messages!</button>}
-                <TweetBox handleTweet={(tweet, image) => this.handleTweet(tweet, image)} />
+                <TweetBox handleTweet={(tweet, image, imageNum) => this.handleTweet(tweet, image, imageNum)} />
                 {tweetsArray != null &&
                     tweetsArray.map(doc =>
                         <Message key={doc.id} uid={doc.tweet.uid} deleteCallback={() => this.deleteCallback(doc.id)}
