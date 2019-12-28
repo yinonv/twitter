@@ -14,8 +14,13 @@ class NavBar extends React.Component {
         firebase.auth().signOut();
         logedOut();
     }
+    readMessages() {
+        const { newCount } = this.props;
+        window.scrollTo(0, 0);
+        newCount(0);
+    }
     render() {
-        const { isSignedIn, imgUrl } = this.props;
+        const { isSignedIn, imgUrl, countNum } = this.props;
         return (
             <header className="header">
                 <div className="menu-container">
@@ -25,8 +30,11 @@ class NavBar extends React.Component {
                     </div>
                     <div>
                         {!isSignedIn && <NavLink exact to="/" className="menu-link" activeClassName='selected'>Login</NavLink>}
-                        {isSignedIn && <div className="user-container"><img className="user-image" src={imgUrl}></img>
-                            <button className="logout-button" onClick={() => this.handleSignOut()}>Sign out</button></div>}
+                        {isSignedIn && <div className="user-container">
+                            {countNum > 0 && <div className="counter" onClick={() => this.readMessages()}>{countNum}</div>}
+                            <img className="user-image" src={imgUrl}></img>
+                            <button className="logout-button" onClick={() => this.handleSignOut()}>Sign out</button>
+                        </div>}
                     </div>
                 </div>
             </header>

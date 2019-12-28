@@ -22,7 +22,7 @@ class Message extends React.Component {
         this.setState({ username: data.userName, img: data.img, loaded: true })
     }
     render() {
-        const { msg, time, date, uid, deleteCallback} = this.props;
+        const { msg, time, date, uid, deleteCallback, image} = this.props;
         const { username, img, loaded } = this.state;
         const currentUser = firebase.auth().currentUser.uid;
         if (!loaded) {
@@ -47,7 +47,8 @@ class Message extends React.Component {
                     </div>
                 </div>
                 <div className="message-content">
-                    <p>{msg}</p>
+                    <p className="message-text">{msg}</p>
+                    {image != undefined && <img src={image} className="tweet-image"></img>}
                 </div>
             </div>
         )

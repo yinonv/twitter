@@ -16,6 +16,9 @@ class Profile extends React.Component {
         this.setState({ file: "Choose Image" });
     }
     async handleUpload(e) {
+        if (e.target.files.length == 0) {
+            return;
+        }
         const { upload } = this.props;
         const file = e.target.files[0];
         const fileName = file.name;

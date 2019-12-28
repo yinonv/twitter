@@ -16,7 +16,10 @@
     margin-right: 10px;
 }
 .message-content {
+    display: flex;
+    align-items: center;
     color: white;
+    margin-top: 10px;
     margin-left: 20px;
     margin-right: 20px;
     word-wrap:break-word;
@@ -24,6 +27,16 @@
 .message-user-info{
     display: flex;
     align-items: center;
+}
+.message-text{
+    word-wrap: break-word;
+    width: 50%;
+}
+.tweet-image{
+    height: 100px;
+    width: 100px;
+    margin-left: 15px;
+    margin-bottom: 10px;
 }
 .img{
     height: 30px;
@@ -66,4 +79,9 @@
     .message-container{
         width: calc(100vw*0.9);
     }
-  }
+}
+@media screen and (max-width: 500){
+    .message-text{
+        width: 60%;
+    }
+}

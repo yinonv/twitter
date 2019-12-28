@@ -28,6 +28,9 @@
 .tweet-button:disabled{
     opacity: 0.5;
 }
+.tweet-button:hover{
+    opacity: 0.8;
+}
 .attach {
 	width: 0.1px;
 	height: 0.1px;
@@ -42,7 +45,7 @@
     cursor: pointer; 
 }
 .attach-pic{
-    transform: scale(.8)
+    transform: scale(.75)
 }
 .text-box{
     position: absolute;
@@ -55,7 +58,7 @@
     resize: none;
     background: transparent;
     color: #CCCCCC;
-    width: calc(100vw/2.2);
+    width: calc(100vw/2.7);
     height: 123px;
     border: none;
     font-family: Roboto;
@@ -81,11 +84,22 @@
 .error-text {
     color: #721C24;
 }
+.image-message{
+    height: 100px;
+    width: 100px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border-radius: 50%;
+}
 @media screen and (max-width: 1000px){
     .error{
         width: calc(100vw/3);
         height: 40px;
         bottom: 15px;
+    }
+    .text-box{
+        width: calc(100vw/3);
     }
     .tweet-button{
         bottom: 15px;
@@ -99,7 +113,7 @@
         width: calc(100vw*0.9);
     }
     .text-box{
-        width: calc(100vw*0.8);
+        width: calc(100vw*0.6);
     }
     .error{
         width: calc(100vw/2);
@@ -113,11 +127,18 @@
         font-size: 15px;
     }
     .text-box{
+        width: calc(100vw*0.5);
         top: 5px;
+    }
+    .error{
+        width: calc(100vw/2.2);
     }
   }
   @media screen and (max-width: 310px){
     .error-text{
         font-size: 14px;
+    }
+    .text-box{
+        width: calc(100vw*0.4);
     }
   }

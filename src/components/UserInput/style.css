@@ -22,6 +22,9 @@
     transform: scale(.96);
     opacity: 0.9;
 }
+.save-button:hover{
+    opacity: 0.8;
+}
 .user-text-box{
     position: absolute;
     left: 16px;

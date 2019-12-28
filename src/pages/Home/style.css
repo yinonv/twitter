@@ -21,3 +21,15 @@
     height: 350px;
     width: 500px;
   }
+  .new-messages-button{
+    margin-top: 15px;
+    font-size: 16px;
+    color: white;
+    background-color: rgb(19, 177, 26);
+    border-radius: 4px;
+    font-family: Roboto;
+    border: none;
+  }
+.new-messages-button:active{
+    transform: scale(.96);
+}

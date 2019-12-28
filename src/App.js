@@ -18,6 +18,7 @@ class App extends React.Component {
       img: '',
       exists: true,
       isSignedIn: false,
+      newMessageCounter: 0,
     }
     this.uid = '';
   }
@@ -52,20 +53,28 @@ class App extends React.Component {
     })
     this.setState({ img: downloadURL })
   }
+  getMessageNum(num) {
+    const { newMessageCounter } = this.state;
+    if (num == 0) {
+      this.setState({ newMessageCounter: 0 });
+      return;
+    }
+    this.setState({ newMessageCounter: newMessageCounter + num })
+  }
   render() {
-    const { isSignedIn, img } = this.state;
+    const { isSignedIn, img, newMessageCounter } = this.state;
     return (
       <div className="container">
         <Router>
-          {isSignedIn && <NavBar imgUrl={img} isSignedIn={isSignedIn} logedOut={() => this.handleLogOut()} />}
+          {isSignedIn && <NavBar newCount={num => this.getMessageNum(num)} countNum={newMessageCounter} imgUrl={img} isSignedIn={isSignedIn} logedOut={() => this.handleLogOut()} />}
           {isSignedIn && <Redirect to="/home" />}
           <Switch>
             <Route exact path="/">
-              <Login updatePhoto={() => this.getPhoto()}upload={(file) => this.handleUpload(file)} />
+              <Login updatePhoto={() => this.getPhoto()} upload={(file) => this.handleUpload(file)} />
             </Route>
             <Route exact path="/home">
               {!isSignedIn && <Redirect to="/" />}
-              <Home />
+              <Home countNum={newMessageCounter} newCount={num => this.getMessageNum(num)} />
             </Route>
             <Route>
               {isSignedIn && <Profile upload={(file) => this.handleUpload(file)} imgUrl={img} exact path="/profile" />}
