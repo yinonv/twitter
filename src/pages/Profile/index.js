@@ -1,8 +1,6 @@
 import React from 'react';
 import './style.css';
 import UserInput from '../../components/UserInput';
-import firebase from 'firebase'
-import { usersRef } from '../../lib/api';
 
 
 class Profile extends React.Component {
@@ -32,7 +30,8 @@ class Profile extends React.Component {
             <div className="profile-body-container">
                 <h1 className="profile-title">Profile</h1>
                 <img className="img-profile" src={imgUrl}></img>
-                <input type="file" className="inputfile" onChange={(e) => this.handleUpload(e)} name="file" id="file" accept=".jpg, .png, .jpeg" />
+                <input type="file" className="inputfile" onChange={(e) => this.handleUpload(e)}
+                    name="file" id="file" accept=".jpg, .png, .jpeg" />
                 <label for="file">{file}</label>
                 <UserInput />
             </div>

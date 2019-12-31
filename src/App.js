@@ -66,7 +66,9 @@ class App extends React.Component {
     return (
       <div className="container">
         <Router>
-          {isSignedIn && <NavBar newCount={num => this.getMessageNum(num)} countNum={newMessageCounter} imgUrl={img} isSignedIn={isSignedIn} logedOut={() => this.handleLogOut()} />}
+          {isSignedIn && <NavBar newCount={num => this.getMessageNum(num)}
+            countNum={newMessageCounter} imgUrl={img} isSignedIn={isSignedIn}
+            logedOut={() => this.handleLogOut()} />}
           {isSignedIn && <Redirect to="/home" />}
           <Switch>
             <Route exact path="/">
@@ -77,7 +79,8 @@ class App extends React.Component {
               <Home countNum={newMessageCounter} newCount={num => this.getMessageNum(num)} />
             </Route>
             <Route>
-              {isSignedIn && <Profile upload={(file) => this.handleUpload(file)} imgUrl={img} exact path="/profile" />}
+              {isSignedIn && <Profile upload={(file) => this.handleUpload(file)}
+                imgUrl={img} exact path="/profile" />}
               {!isSignedIn && <Redirect to="/" />}
             </Route>
           </Switch>

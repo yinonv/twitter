@@ -28,10 +28,12 @@ class Home extends React.Component {
     tweetFromDifferentUser(tweets) {
         const changes = tweets.docChanges();
         const currentUID = firebase.auth().currentUser.uid;
-        if (changes[0].type == "added" && changes[0].doc.data().uid != currentUID && changes[0].newIndex == 0) {
+        if (changes[0].type == "added" && changes[0].doc.data().uid != currentUID 
+            && changes[0].newIndex == 0) {
             return true;
         }
-        if (changes.length == 2 && changes[1].type == "added" && changes[1].doc.data().uid != currentUID && changes[1].newIndex == 0) {
+        if (changes.length == 2 && changes[1].type == "added"
+            && changes[1].doc.data().uid != currentUID && changes[1].newIndex == 0) {
             return true;
         }
         return false;
@@ -124,7 +126,6 @@ class Home extends React.Component {
     async deleteCallback(docId) {
         const { tweetsArray } = this.state;
         let arr = [];
-        debugger;
         const doc = await messages.doc(docId).get();
         const imageNum = doc.data().imageNum;
         if (imageNum != null) {
@@ -142,23 +143,15 @@ class Home extends React.Component {
         });
         this.setState({ tweetsArray: arr });
     }
-    scrollUp() {
-        const { newCount } = this.props;
-        window.scrollTo(0, 0);
-        this.setState({ newMessages: false })
-        this.newCounter = 0;
-        newCount(this.newCounter);
-    }
     render() {
         const { tweetsArray, moreMessages, newMessages } = this.state;
         return (
             <div className="home-body-container">
-                {newMessages && <button className="new-messages-button"
-                    onClick={() => this.scrollUp()}>Check new messages!</button>}
                 <TweetBox handleTweet={(tweet, image, imageNum) => this.handleTweet(tweet, image, imageNum)} />
                 {tweetsArray != null &&
                     tweetsArray.map(doc =>
-                        <Message key={doc.id} uid={doc.tweet.uid} deleteCallback={() => this.deleteCallback(doc.id)}
+                        <Message key={doc.id} uid={doc.tweet.uid}
+                            deleteCallback={() => this.deleteCallback(doc.id)}
                             msg={doc.tweet.content} date={doc.tweet.shortDate.date}
                             time={doc.tweet.shortDate.time} image={doc.tweet.image} />
                     )}

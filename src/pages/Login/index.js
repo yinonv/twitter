@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 import firebase from 'firebase'
-import { StyledFirebaseAuth, FirebaseAuth } from 'react-firebaseui';
+import { StyledFirebaseAuth } from 'react-firebaseui';
 import { usersRef } from '../../lib/api'
 
 class Login extends React.Component {
@@ -31,7 +31,7 @@ class Login extends React.Component {
             }
         }
     }
-    componentDidMount() {  
+    componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 const provider = user.providerData[0].providerId
@@ -117,11 +117,14 @@ class Login extends React.Component {
                 </div>
                 <div className="input-container">
                     {!exists && <label>Enter email</label>}
-                    <input onChange={(e) => this.setState({ email: e.target.value })} className="input" type="email" placeholder="email"></input>
+                    <input onChange={(e) => this.setState({ email: e.target.value })}
+                        className="input" type="email" placeholder="email"></input>
                     {!exists && <label>Enter username</label>}
-                    {!exists && <input onChange={(e) => this.setState({ username: e.target.value })} className="input" placeholder="username"></input>}
+                    {!exists && <input onChange={(e) => this.setState({ username: e.target.value })}
+                        className="input" placeholder="username"></input>}
                     {!exists && <label>Enter password</label>}
-                    <input onChange={(e) => this.setState({ password: e.target.value })} className="input" type="password" placeholder="password"></input>
+                    <input onChange={(e) => this.setState({ password: e.target.value })}
+                        className="input" type="password" placeholder="password"></input>
                 </div>
                 {wrongInput && <div>
                     <p className="error-message">{this.errorMessage}</p>
@@ -130,7 +133,8 @@ class Login extends React.Component {
                     <button onClick={() => this.handleLogin()} className="login-button">Login</button>
                 </div>}
                 {!exists && <div>
-                    <button disabled={loading} onClick={() => this.handleRegister()} className="login-button">Register</button>
+                    <button disabled={loading} onClick={() => this.handleRegister()} 
+                        className="login-button">Register</button>
                 </div>}
                 {!isSignedIn && <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />}
                 {isSignedIn && <div>
