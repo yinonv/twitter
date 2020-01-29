@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './style.css';
 import firebase from 'firebase'
 import { StyledFirebaseAuth } from 'react-firebaseui';
-import { usersRef } from '../../lib/api'
+import {
+    firebaseAuth, uiConfig, getDatafromUID, setNameAndImage, signInWithEmail, createUserWithEmail, signOut
+} from '../../lib/api'
 
-class Login extends React.Component {
+class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,15 +23,6 @@ class Login extends React.Component {
         this.defaultImage = true;
         this.strength = ''
         this.errorMessage = ''
-        this.uiConfig = {
-            signInFlow: "popup",
-            signInOptions:
-                [firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.FacebookAuthProvider.PROVIDER_ID],
-            callbacks: {
-                signInSuccess: () => false
-            }
-        }
     }
     componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
@@ -43,20 +36,18 @@ class Login extends React.Component {
         })
     }
     async handleGoogleFacebookLogin(user) {
-        const doc = await usersRef.doc(user.uid).get();
-        if (doc.data() != undefined) {
+        const data = await getDatafromUID(user.uid)
+        if (data != undefined) {
             return;
         }
-        usersRef.doc(user.uid).set({
-            userName: user.providerData[0].displayName,
-            img: user.providerData[0].photoURL,
-        })
+        const providerData = user.providerData[0]
+        await setNameAndImage(user.uid, providerData.displayName, providerData.photoURL)
         this.props.updatePhoto();
     }
     async handleLogin() {
         const { email, password } = this.state;
         try {
-            await firebase.auth().signInWithEmailAndPassword(email, password);
+            await signInWithEmail(email, password);
         }
         catch (e) {
             this.errorMessage = e.message;
@@ -86,11 +77,8 @@ class Login extends React.Component {
         }
         const { email, password, username } = this.state;
         try {
-            const data = await firebase.auth().createUserWithEmailAndPassword(email, password);
-            usersRef.doc(data.user.uid).set({
-                userName: username,
-                img: this.imgUrl,
-            })
+            const data = await createUserWithEmail(email, password);
+            await setNameAndImage(data.user.uid, username, this.imgUrl)
         } catch (e) {
             switch (e.message) {
                 case "Password should be at least 6 characters": {
@@ -133,12 +121,12 @@ class Login extends React.Component {
                     <button onClick={() => this.handleLogin()} className="login-button">Login</button>
                 </div>}
                 {!exists && <div>
-                    <button disabled={loading} onClick={() => this.handleRegister()} 
+                    <button disabled={loading} onClick={() => this.handleRegister()}
                         className="login-button">Register</button>
                 </div>}
-                {!isSignedIn && <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />}
+                {!isSignedIn && <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebaseAuth} />}
                 {isSignedIn && <div>
-                    <button onClick={() => firebase.auth().signOut()}>Sign out</button>
+                    <button onClick={() => signOut}>Sign out</button>
                 </div>}
             </div>
         )

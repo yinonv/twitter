@@ -1,30 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './style.css'
-import { usersRef } from '../../lib/api'
-import firebase from 'firebase'
+import { getDatafromUID, getCurrentUid } from '../../lib/api'
 
-class Message extends React.Component {
+class Message extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = {  
             username: '',
             img: '',
             loaded: false,
         }
     }
     componentDidMount() {
-        const { uid } = this.props;
-        this.getDatafromUID(uid);
+        this.setDatafromUID();
     }
-    async getDatafromUID(uid) {
-        const doc = await usersRef.doc(uid).get();
-        const data = doc.data();
+    async setDatafromUID() {
+        const { uid } = this.props;
+        const data = await getDatafromUID(uid)
         this.setState({ username: data.userName, img: data.img, loaded: true })
     }
     render() {
-        const { msg, time, date, uid, deleteCallback, image} = this.props;
+        const { msg, time, date, uid, deleteCallback, image } = this.props;
         const { username, img, loaded } = this.state;
-        const currentUser = firebase.auth().currentUser.uid;
+        const currentUser = getCurrentUid()
         if (!loaded) {
             return <div></div>
         }

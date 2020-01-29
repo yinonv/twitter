@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './style.css'
-import firebase from 'firebase'
-import { usersRef } from '../../lib/api';
+import { updateName, getName } from '../../lib/api';
 
-class UserInput extends React.Component {
+class UserInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,28 +14,18 @@ class UserInput extends React.Component {
     }
     componentDidMount() {
         this.setState({ saved: false });
-        this.getName()
+        this.setName()
     }
-    async getName() {
-        const data = await this.getDoc();
-        this.setState({ savedName: data.userName, saved: true })
-    }
-    async getDoc() {
-        const uid = firebase.auth().currentUser.uid;
-        const doc = await usersRef.doc(uid).get();
-        return doc.data();
+    async setName() {
+        const username = await getName()
+        this.setState({ savedName: username, saved: true })
     }
     async handleUser() {
         const { name } = this.state;
         if (name == null) {
             return;
         }
-        const uid = firebase.auth().currentUser.uid;
-        const data = await this.getDoc();
-        usersRef.doc(uid).set({
-            userName: name,
-            img: data.img,
-        })
+        await updateName(name)
         this.message = "Your profile has been saved."
         this.setState({ saved: true, savedName: name });
     }

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './style.css'
 import { NavLink } from "react-router-dom";
-import firebase from 'firebase'
+import { signOut } from '../../lib/api'
 
-class NavBar extends React.Component {
+class NavBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,7 +11,7 @@ class NavBar extends React.Component {
     }
     handleSignOut() {
         const { logedOut } = this.props;
-        firebase.auth().signOut();
+        signOut()
         logedOut();
     }
     readMessages() {

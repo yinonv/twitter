@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './style.css';
 import UserInput from '../../components/UserInput';
 
 
-class Profile extends React.Component {
+class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {

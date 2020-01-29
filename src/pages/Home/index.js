@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './style.css';
 import TweetBox from '../../components/TweetBox';
 import Message from '../../components/Message'
-import { createPost, messages } from '../../lib/api';
-import firebase from 'firebase'
+import { createPost, messages, getCurrentUid, deleteTweet, getAllTweets, getNextTweets } from '../../lib/api';
 import InfiniteLoader from 'react-infinite-loader'
 
-class Home extends React.Component {
+class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,8 +26,8 @@ class Home extends React.Component {
     }
     tweetFromDifferentUser(tweets) {
         const changes = tweets.docChanges();
-        const currentUID = firebase.auth().currentUser.uid;
-        if (changes[0].type == "added" && changes[0].doc.data().uid != currentUID 
+        const currentUID = getCurrentUid();
+        if (changes[0].type == "added" && changes[0].doc.data().uid != currentUID
             && changes[0].newIndex == 0) {
             return true;
         }
@@ -62,8 +61,7 @@ class Home extends React.Component {
         });
     }
     async getAllMessages() {
-        const querySnapshot = await messages.orderBy('fullDate', 'desc').get();
-        const docs = querySnapshot.docs;
+        const docs = await getAllTweets();
         let arr = [];
         docs.forEach(doc => {
             arr.push({ id: doc.id, tweet: doc.data() })
@@ -91,7 +89,7 @@ class Home extends React.Component {
         if (msg == '' && image == null) {
             return;
         }
-        const uid = firebase.auth().currentUser.uid;
+        const uid = getCurrentUid();
         const fullDate = new Date;
         const shortDate = this.getDate(fullDate);
         const newTweet = {
@@ -106,33 +104,18 @@ class Home extends React.Component {
     }
     async showMoreDocuments() {
         const { tweetsArray } = this.state;
-        const first = messages
-            .orderBy("fullDate", "desc")
-            .limit(tweetsArray.length);
-        const documentSnapshots = await first.get()
-        const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
-        const next = messages
-            .orderBy("fullDate", "desc")
-            .startAfter(lastVisible)
-            .limit(10);
-        const nextDocumentsSnapshot = await next.get();
-        if (nextDocumentsSnapshot.docs.length < 10) {
+        const nextDocuments = await getNextTweets(tweetsArray.length)
+        if (nextDocuments.length < 10) {
             this.setState({ moreMessages: false })
         }
         let arr = [];
-        nextDocumentsSnapshot.docs.forEach(doc => arr.push({ id: doc.id, tweet: doc.data() }));
+        nextDocuments.forEach(doc => arr.push({ id: doc.id, tweet: doc.data() }));
         this.setState({ tweetsArray: [...tweetsArray, ...arr] })
     }
     async deleteCallback(docId) {
         const { tweetsArray } = this.state;
         let arr = [];
-        const doc = await messages.doc(docId).get();
-        const imageNum = doc.data().imageNum;
-        if (imageNum != null) {
-            const storageRef = firebase.storage().ref(`/message_images/${imageNum}`);
-            await storageRef.delete();
-        }
-        await messages.doc(docId).delete();
+        await deleteTweet(docId)
         if (tweetsArray.length < 10) {
             return;
         }
@@ -144,7 +127,7 @@ class Home extends React.Component {
         this.setState({ tweetsArray: arr });
     }
     render() {
-        const { tweetsArray, moreMessages, newMessages } = this.state;
+        const { tweetsArray, moreMessages } = this.state;
         return (
             <div className="home-body-container">
                 <TweetBox handleTweet={(tweet, image, imageNum) => this.handleTweet(tweet, image, imageNum)} />

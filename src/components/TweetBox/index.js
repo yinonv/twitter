@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './style.css'
-import firebase from 'firebase'
+import { uploadImage } from '../../lib/api'
 
 
-class TweetBox extends React.Component {
+class TweetBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,11 +21,8 @@ class TweetBox extends React.Component {
             return;
         }
         this.setState({ image: './img_upload_loader.gif', showImage: true, uploading: true });
-        this.num = Math.random();
-        const storageRef = firebase.storage().ref(`/message_images/${this.num}`);
         const file = e.target.files[0];
-        const snapshot = await storageRef.put(file);
-        const downloadURL = await snapshot.ref.getDownloadURL();
+        const downloadURL = await uploadImage(file)
         this.setState({ image: downloadURL, uploading: false });
     }
     handlInput(e) {
@@ -42,7 +39,7 @@ class TweetBox extends React.Component {
         const { handleTweet } = this.props;
         await handleTweet(inputValue, image, this.num);
         this.textArea.current.value = '';
-        this.setState({ inputValue: '', showImage: false , image: null})
+        this.setState({ inputValue: '', showImage: false, image: null })
     }
     render() {
         const { error, uploading, image, showImage } = this.state;

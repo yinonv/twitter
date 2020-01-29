@@ -6,7 +6,7 @@ import Login from './pages/Login'
 import NavBar from './components/NavBar'
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import firebase from 'firebase'
-import { usersRef } from './lib/api'
+import { getDatafromUID, uploadUserImage, setNameAndImage } from './lib/api'
 
 
 class App extends React.Component {
@@ -31,8 +31,7 @@ class App extends React.Component {
     })
   }
   async getPhoto() {
-    const doc = await usersRef.doc(this.uid).get();
-    const data = doc.data();
+    const data = await getDatafromUID(this.uid)
     if (data != undefined) {
       this.setState({ img: data.img })
     }
@@ -42,15 +41,9 @@ class App extends React.Component {
   }
   async handleUpload(file) {
     this.setState({ img: './img_upload_loader.gif' });
-    const storageRef = firebase.storage().ref(`/user_images/${this.uid}`);
-    const doc = await usersRef.doc(this.uid).get();
-    const name = doc.data().userName;
-    const snapshot = await storageRef.put(file);
-    const downloadURL = await snapshot.ref.getDownloadURL();
-    usersRef.doc(this.uid).set({
-      userName: name,
-      img: downloadURL,
-    })
+    const downloadURL = await uploadUserImage(this.uid, file)
+    const data = await getDatafromUID(this.uid)
+    await setNameAndImage(this.uid, data.userName, downloadURL)
     this.setState({ img: downloadURL })
   }
   getMessageNum(num) {
