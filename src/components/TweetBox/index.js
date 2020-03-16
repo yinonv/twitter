@@ -17,7 +17,7 @@ class TweetBox extends Component {
         this.textArea = React.createRef();
     }
     async uploadImage(e) {
-        if (e.target.files.length == 0) {
+        if (e.target.files.length === 0) {
             return;
         }
         this.setState({ image: './img_upload_loader.gif', showImage: true, uploading: true });

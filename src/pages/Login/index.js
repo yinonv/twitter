@@ -28,7 +28,7 @@ class Login extends Component {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 const provider = user.providerData[0].providerId
-                if (provider == "google.com" || provider == "facebook.com") {
+                if (provider === "google.com" || provider === "facebook.com") {
                     this.handleGoogleFacebookLogin(user);
                 }
             }
@@ -37,7 +37,7 @@ class Login extends Component {
     }
     async handleGoogleFacebookLogin(user) {
         const data = await getDatafromUID(user.uid)
-        if (data != undefined) {
+        if (data !== undefined) {
             return;
         }
         const providerData = user.providerData[0]

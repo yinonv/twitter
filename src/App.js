@@ -32,7 +32,7 @@ class App extends React.Component {
   }
   async getPhoto() {
     const data = await getDatafromUID(this.uid)
-    if (data != undefined) {
+    if (data !== undefined) {
       this.setState({ img: data.img })
     }
   }
@@ -48,7 +48,7 @@ class App extends React.Component {
   }
   getMessageNum(num) {
     const { newMessageCounter } = this.state;
-    if (num == 0) {
+    if (num === 0) {
       this.setState({ newMessageCounter: 0 });
       return;
     }

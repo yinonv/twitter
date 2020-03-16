@@ -27,12 +27,12 @@ class Home extends Component {
     tweetFromDifferentUser(tweets) {
         const changes = tweets.docChanges();
         const currentUID = getCurrentUid();
-        if (changes[0].type == "added" && changes[0].doc.data().uid != currentUID
-            && changes[0].newIndex == 0) {
+        if (changes[0].type === "added" && changes[0].doc.data().uid !== currentUID
+            && changes[0].newIndex === 0) {
             return true;
         }
-        if (changes.length == 2 && changes[1].type == "added"
-            && changes[1].doc.data().uid != currentUID && changes[1].newIndex == 0) {
+        if (changes.length === 2 && changes[1].type === "added"
+            && changes[1].doc.data().uid !== currentUID && changes[1].newIndex === 0) {
             return true;
         }
         return false;
@@ -86,7 +86,7 @@ class Home extends Component {
         }
     }
     async handleTweet(msg, image, imageNum) {
-        if (msg == '' && image == null) {
+        if (msg === '' && image === null) {
             return;
         }
         const uid = getCurrentUid();
@@ -120,7 +120,7 @@ class Home extends Component {
             return;
         }
         tweetsArray.forEach(doc => {
-            if (doc.id != docId) {
+            if (doc.id !== docId) {
                 arr.push(doc);
             }
         });
@@ -131,7 +131,7 @@ class Home extends Component {
         return (
             <div className="home-body-container">
                 <TweetBox handleTweet={(tweet, image, imageNum) => this.handleTweet(tweet, image, imageNum)} />
-                {tweetsArray != null &&
+                {tweetsArray !== null &&
                     tweetsArray.map(doc =>
                         <Message key={doc.id} uid={doc.tweet.uid}
                             deleteCallback={() => this.deleteCallback(doc.id)}

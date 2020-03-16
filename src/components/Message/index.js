@@ -39,14 +39,14 @@ class Message extends Component {
                             <div className="time-date">{time}</div>
                         </div>
                         <div>
-                            {currentUser == uid && <button className="delete-button"
+                            {currentUser === uid && <button className="delete-button"
                                 onClick={deleteCallback}>delete</button>}
                         </div>
                     </div>
                 </div>
                 <div className="message-content">
                     <p className="message-text">{msg}</p>
-                    {image != undefined && <img src={image} className="tweet-image"></img>}
+                    {image !== undefined && <img src={image} className="tweet-image"></img>}
                 </div>
             </div>
         )
